@@ -10,7 +10,7 @@
   // Maintainers: how to change versions, and what was tested and why, are in
   // .devcontainer/README.md.
   // ---------------------------------------------------------------------------
-  "name": "SPPH 381H workspace (R + Quarto + Python)",
+  "name": "HMHDA 0115 workspace (R + Quarto + Python)",
 
   // 🤖 AI edit (Claude), 2026-10-20: this "image" (was the rocker image plus
   // the Quarto and Python features, built in every new Codespace). The course
