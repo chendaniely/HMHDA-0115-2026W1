@@ -21,9 +21,13 @@ Decided 2026-10-22. Daniel: "let's put the term in the repo name as well."
 
 ## Data
 
-The datasets in `data/` were copied on 2026-10-22 from
+The five datasets below were copied on 2026-10-22 from
 [`chendaniely/2026-s1-ubc-dash-vis`](https://github.com/chendaniely/2026-s1-ubc-dash-vis) at
 `26199ed`. Each one is byte for byte the same as the upstream copy named here.
+
+They sit at the top level, next to the code and `patients.csv`, so `read_csv("pew.csv")` works
+without a folder in the path. Decided 2026-10-22. Daniel: "don't need to worry about working
+directories this way."
 
 | File | What it is | Where it came from |
 |---|---|---|
