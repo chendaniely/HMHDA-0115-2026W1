@@ -97,22 +97,3 @@ adapts.
 The Codespace setup (`.devcontainer/`), `.gitignore`, `patients.csv` and the structure of
 `example.qmd` come from [`ehsanx/HDSx-workspace`](https://github.com/ehsanx/HDSx-workspace) at
 `990153f`.
-
-## Licence
-
-GPL-3.0 ([`LICENSE`](LICENSE)), the same as the HDSx book, for now. The data files and the
-reading keep their own terms (see [Data](#data) and [Readings](#readings)).
-
-Decided 2026-10-22. Daniel: "let's match and see if we are allowed like in HDSx and use GPL for
-now and decide/fix later. this was a mass copy i will probably re-write things later".
-
-## Course code
-
-`HMHDA-0115` is the Workday code `HMHDA_VM 0115` with the `_VM` suffix and the section (`009`)
-dropped, the same way `SPPH_V 381H` became `SPPH-381H`. `0115` is Extended Learning's course
-number. Its sister courses are `0114` and `0116`.
-
-Each term gets its own repo named for the term, here `HMHDA-0115-2026W1`, inside
-`~/git/ubc/HMHDA-0115/`.
-
-Decided 2026-10-22. Daniel: "let's put the term in the repo name as well."
