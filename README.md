@@ -84,7 +84,8 @@ credited, and it may not be redistributed under a different licence.
 ```
 
 The tidy data chapter of *Data Science: A First Introduction* covers the same ideas:
-<https://datasciencebook.ca/wrangling.html#tidy-data>.
+<https://datasciencebook.ca/wrangling.html#tidy-data>. So does the tidy data chapter of
+*R for Data Science*: see [`readings/r4ds-tidy-data.md`](readings/r4ds-tidy-data.md).
 
 ## Credits
 
