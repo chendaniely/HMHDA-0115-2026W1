@@ -2,8 +2,11 @@
 
 Students fork this repo and work in it from a Codespace, and most have never coded. Keep the
 top level simple: data and code sit there so `read_csv("pew.csv")` needs no folder. Anything
-for the instructor or for agents goes in a subfolder. Decisions and next steps are in
-`TODO.md`.
+for the instructor or for agents goes in a subfolder.
+
+Decisions and next steps are in `TODO.md`, which is git-ignored and exists only on Daniel's
+machine. Keep recording decisions there, with Daniel's reasons in his words, but never
+commit it: it was removed from the history on 2026-10-23.
 
 ## Class notes live in `lectures/`, not at the root
 
