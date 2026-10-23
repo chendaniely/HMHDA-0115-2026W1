@@ -6,25 +6,30 @@ over the instructions from the HDSx textbook we just created and how to use the 
 dont' need the AI edit comments, but we shoudl refernce and give credit to the HDSx textbook and
 workspace repo for origninal source)"
 
-## 1. Dev container: VS Code, R and Quarto, no Python
+## 1. Dev container: VS Code, R and Quarto
 
-Copy from `ehsanx/HDSx-workspace` main at `990153f` (PR #15). The local clones are behind it:
-`/Users/dan/temp/HDSx-workspace` has it as `upstream/main`, and `~/git/ubc/SPPH-381H/HDSx-workspace`
-is older still.
+Done on 2026-10-22. `.devcontainer/` and `.gitattributes` were copied unchanged from
+`ehsanx/HDSx-workspace` main at `990153f` (PR #15), and then the Codespace was renamed. That
+keeps the same course image, `ghcr.io/chendaniely/hdsx-workspace`, with Python in it.
 
-- Reuse the same course image, `ghcr.io/chendaniely/hdsx-workspace`, Python included.
-  Daniel, 2026-10-22: "let's use the same setup if python is built into the container. at
-  least for now." Python is 133 MB of the 1.9 GB image, a small part of the roughly 4-minute
-  start, which is mostly the image download. Compiling Python takes about 4 minutes, but only
-  when the image is rebuilt, never when a student opens a Codespace.
-- Copy the Codespace side from `.devcontainer/`: `devcontainer.json` (the image, pinned by
-  digest), `README.md`, `setup.sh`, `install-packages.sh`, `requirements.txt` and
-  `constraints.txt`.
-- Leave the image recipe (`.devcontainer/image/`) and `.github/workflows/build-image.yml` in
-  HDSx-workspace, so only one repo builds the image.
-- Rename the "SPPH 381H" strings.
+Daniel's reasons, both on 2026-10-22:
 
-Open question for Daniel: is the R package list the same as SPPH 381H's?
+- "let's use the same setup if python is built into the container. at least for now."
+- "let's just copy over the same devcontainer setup for now i can optimize later and fork the
+  changes"
+
+Python is 133 MB of the 1.9 GB image, a small part of the roughly 4-minute start, which is
+mostly the image download. Compiling Python takes about 4 minutes, but only when the image is
+rebuilt, never when a student opens a Codespace.
+
+- `build-image.yml` stays in HDSx-workspace. It pushes to `ghcr.io/<owner>/hdsx-workspace`,
+  the image SPPH 381H students pull, and its check renders `practice_report.qmd`, which this
+  repo doesn't have. To build this course's own image, copy the workflow and change both.
+- Still to do: push, then open a fresh Codespace from this repo in the browser and work through
+  the checklist in `.devcontainer/README.md`.
+- Open question for Daniel: is the R package list the same as SPPH 381H's?
+- Later, when Daniel optimizes: give this course its own image, without Python, and perhaps
+  without the RStudio Server that comes with the rocker base (1.18 GB of the 1.9 GB).
 
 ## 2. README: how to use the Codespace
 

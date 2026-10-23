@@ -2,6 +2,14 @@
 
 <!-- 🤖 AI edit (Claude), 2026-10-20/21: this file. -->
 
+**Copied on 2026-10-22** from
+[`ehsanx/HDSx-workspace` at `990153f`](https://github.com/ehsanx/HDSx-workspace/tree/990153fb335f6d3e4f7dd1e5e15420675ad95b91/.devcontainer).
+The only change is the Codespace name. Below, "SPPH 381H" means the course this
+was written for. The course image is still built in HDSx-workspace, by its
+`build-image.yml` workflow and the `practice_report.qmd` that workflow renders,
+so the rebuild steps below run in that repo. After a rebuild, copy the new digest
+into this repo's `devcontainer.json` as well.
+
 For instructors and TAs who maintain the SPPH 381H student Codespace. Students
 don't need this file; their steps are in the top-level `README.md`.
 
