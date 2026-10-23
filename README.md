@@ -21,6 +21,12 @@ Work through these pages in order. You don't need to install anything on your ow
 
 Something not working? See [Troubleshooting](docs/07-troubleshooting.md).
 
+## Class notes
+
+Notes from each live session are in [`lectures/`](lectures/), one folder per date. An AI model
+writes them from a recording of the session; [`lectures/README-prompt.md`](lectures/README-prompt.md)
+explains how.
+
 ## Data
 
 The five datasets below were copied on 2026-10-22 from
