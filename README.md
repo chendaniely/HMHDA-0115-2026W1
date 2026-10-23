@@ -8,16 +8,18 @@ offered through UBC Extended Learning and developed by the UBC Department of Med
 UBC Data Science Institute. The course page is
 [extendedlearning.ubc.ca/courses/health-data-visualization/0115](https://extendedlearning.ubc.ca/courses/health-data-visualization/0115).
 
-## Course code
+## Get set up
 
-`HMHDA-0115` is the Workday code `HMHDA_VM 0115` with the `_VM` suffix and the section (`009`)
-dropped, the same way `SPPH_V 381H` became `SPPH-381H`. `0115` is Extended Learning's course
-number. Its sister courses are `0114` and `0116`.
+Work through these pages in order. You don't need to install anything on your own computer.
 
-Each term gets its own repo named for the term, here `HMHDA-0115-2026W1`, inside
-`~/git/ubc/HMHDA-0115/`.
+1. [Create a GitHub account](docs/01-github-account.md)
+2. [Sign up for GitHub Copilot](docs/02-copilot.md)
+3. [Open your Codespace](docs/03-open-codespace.md)
+4. [Try R with `example.R`](docs/04-try-r.md)
+5. [Try Quarto with `example.qmd`](docs/05-try-quarto.md)
+6. [Stop your Codespace when you finish](docs/06-stop-codespace.md)
 
-Decided 2026-10-22. Daniel: "let's put the term in the repo name as well."
+Something not working? See [Troubleshooting](docs/07-troubleshooting.md).
 
 ## Data
 
@@ -39,6 +41,20 @@ directories this way."
 
 `ebola.csv` comes with its own terms: the data may be copied and changed, the source must be
 credited, and it may not be redistributed under a different licence.
+
+`patients.csv` is a small practice dataset for `example.R` and `example.qmd`, from
+[`ehsanx/HDSx-workspace`](https://github.com/ehsanx/HDSx-workspace).
+
+## Finding more health data
+
+- [Synthea downloads](https://synthetichealth.github.io/downloads.html): synthetic patient
+  records from Synthea, an open-source patient simulator made by The MITRE Corporation. The
+  patients aren't real, so the data has no privacy restrictions. Start with the small sample
+  files: "100 Sample Synthetic Patient Records, CSV" is a 7 MB download. The million-patient
+  archives (21 GB and more) are too big for a Codespace.
+- [Kaggle datasets](https://www.kaggle.com/datasets): public datasets shared by many people,
+  including lots of health data. Each dataset has its own licence and quality, so read its
+  description before you use it.
 
 ## Readings
 
@@ -63,3 +79,34 @@ credited, and it may not be redistributed under a different licence.
 
 The tidy data chapter of *Data Science: A First Introduction* covers the same ideas:
 <https://datasciencebook.ca/wrangling.html#tidy-data>.
+
+## Credits
+
+The setup pages in `docs/` and their screenshots in `img/` are adapted from the
+[HDSx course book](https://ehsanx.github.io/HDSx/), *Health Data Science: AI and Knowledge
+Translation* by M. Ehsan Karim and the AI-KT team (source:
+[`ehsanx/HDSx`](https://github.com/ehsanx/HDSx) at `4056e84`). Each page links to the chapter it
+adapts.
+
+The Codespace setup (`.devcontainer/`), `.gitignore`, `patients.csv` and the structure of
+`example.qmd` come from [`ehsanx/HDSx-workspace`](https://github.com/ehsanx/HDSx-workspace) at
+`990153f`.
+
+## Licence
+
+GPL-3.0 ([`LICENSE`](LICENSE)), the same as the HDSx book, for now. The data files and the
+reading keep their own terms (see [Data](#data) and [Readings](#readings)).
+
+Decided 2026-10-22. Daniel: "let's match and see if we are allowed like in HDSx and use GPL for
+now and decide/fix later. this was a mass copy i will probably re-write things later".
+
+## Course code
+
+`HMHDA-0115` is the Workday code `HMHDA_VM 0115` with the `_VM` suffix and the section (`009`)
+dropped, the same way `SPPH_V 381H` became `SPPH-381H`. `0115` is Extended Learning's course
+number. Its sister courses are `0114` and `0116`.
+
+Each term gets its own repo named for the term, here `HMHDA-0115-2026W1`, inside
+`~/git/ubc/HMHDA-0115/`.
+
+Decided 2026-10-22. Daniel: "let's put the term in the repo name as well."
