@@ -21,6 +21,11 @@ session, and it is the course root as far as `class_notes.py` is concerned:
   `--folder "$PWD/lectures/<date>"` from the repo root, with the lecture's date, or create
   that folder first.
 
+Before suggesting a commit for a session, run `make plaud-check`. Daniel told the class the
+audio is never published, so each `plaud.md` link must be shared without it
+(`is_audio=0`). If the check fails, tell Daniel to reshare the link on Plaud without the
+audio; don't drop the file.
+
 The live sessions are Daniel's extra lectures in the weekly office hours (Thursdays, 6 to
 7 pm Pacific). The session type comes from Daniel, never from Plaud's title. The R logs are
 `history.R` and `R-console.txt`, each optional.

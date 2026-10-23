@@ -20,7 +20,7 @@ Each class session has a folder here in `lectures/`, named by date, with a suffi
 
 | File | What it is |
 |---|---|
-| `plaud.md` | share link to the recording |
+| `plaud.md` | share link to Plaud's page for the session: its transcript and notes, without the audio |
 | `transcript-plaud.md` | the transcript: machine-generated, lightly cleaned up by Plaud ← input |
 | `history.R` | the R code that was run: the R history, or the script written in class ← input, optional |
 | `R-console.txt` | the R console, with everything R printed back ← input, optional |
@@ -90,8 +90,8 @@ doesn't touch them never makes old notes look out of date.
 
 ## A note on privacy
 
-These transcripts include your voices, and this repository is public: anyone on the
-internet can read them, and the link in each `plaud.md` plays the recording to anyone who
-has it. Students appear in the transcript as `Speaker 2`, `Speaker 4`, and so on. The
-prompt instructs the model to keep it that way and never to attach a name to a question.
-If you change the prompt, keep that rule.
+The sessions are recorded, but only the text is published: the audio isn't, so your voice
+never is. This repository is public, so anyone on the internet can read the transcripts, and
+the link in each `plaud.md` opens the same text on Plaud's site. Students appear in the
+transcript as `Speaker 2`, `Speaker 4`, and so on. The prompt instructs the model to keep it
+that way and never to attach a name to a question. If you change the prompt, keep that rule.

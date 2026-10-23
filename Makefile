@@ -11,6 +11,7 @@
 #   make notes-force   rebuild every session from the current prompt (after editing it)
 #   make payload ONLY=lectures/<date>   print the exact message sent for one session
 #   make fetch URL=<plaud share link>   add a session from a recording (instructor only)
+#   make plaud-check   check that no session's Plaud link shares the audio (before committing)
 #
 # Extra flags pass through ARGS, e.g. `make notes ARGS="--dry-run"` or
 # `make notes-force ARGS="--only lectures/<date> --model sonnet"`.
@@ -21,7 +22,7 @@ PYTHON ?= python3
 NOTES_DIR ?= lectures
 ARGS ?=
 
-.PHONY: help notes notes-force payload fetch
+.PHONY: help notes notes-force payload fetch plaud-check
 
 help:  ## List the targets
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -37,3 +38,16 @@ payload:  ## Print the message sent for one session (ONLY=lectures/<date>)
 
 fetch:  ## Add a session from a Plaud share link (URL=<link>)
 	$(PYTHON) $(CLASS_NOTES) fetch --repo $(NOTES_DIR) $(URL) $(ARGS)
+
+# The share page reads api.plaud.ai/share/access/<id>, whose is_audio is 0 when a link was
+# shared without the audio. The API is Plaud's own and undocumented, so this can break.
+plaud-check:  ## Check that no session's Plaud link shares the audio
+	@status=0; for f in $(NOTES_DIR)/*/plaud.md; do \
+	  [ -f "$$f" ] || continue; \
+	  id=$$(tr -d '<>\n' < "$$f" | sed 's#.*/s/##'); \
+	  audio=$$(curl -s "https://api.plaud.ai/share/access/$$id" | $(PYTHON) -c 'import json, sys; print(json.load(sys.stdin).get("is_audio", "?"))' 2>/dev/null); \
+	  echo "  $$f: is_audio=$${audio:-?}"; \
+	  [ "$$audio" = "0" ] || status=1; \
+	done; \
+	if [ $$status -ne 0 ]; then echo "A link shares the audio, or couldn't be checked: reshare it on Plaud without the audio."; fi; \
+	exit $$status
