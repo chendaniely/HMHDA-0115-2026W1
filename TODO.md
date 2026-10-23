@@ -12,20 +12,19 @@ Copy from `ehsanx/HDSx-workspace` main at `990153f` (PR #15). The local clones a
 `/Users/dan/temp/HDSx-workspace` has it as `upstream/main`, and `~/git/ubc/SPPH-381H/HDSx-workspace`
 is older still.
 
-- `.devcontainer/`: `devcontainer.json`, `README.md`, `setup.sh`, `install-packages.sh`, and
-  `image/` (the course image recipe, with its `course-packages` feature).
-- `.github/workflows/build-image.yml`, which builds the image.
-- Drop the Python parts: `requirements.txt`, `constraints.txt`, the Python and Jupyter
-  extensions, the Python feature, the Python steps in `install-packages.sh`, the `{python}`
-  render check, and the notebook notes in `.devcontainer/README.md`.
+- Reuse the same course image, `ghcr.io/chendaniely/hdsx-workspace`, Python included.
+  Daniel, 2026-10-22: "let's use the same setup if python is built into the container. at
+  least for now." Python is 133 MB of the 1.9 GB image, a small part of the roughly 4-minute
+  start, which is mostly the image download. Compiling Python takes about 4 minutes, but only
+  when the image is rebuilt, never when a student opens a Codespace.
+- Copy the Codespace side from `.devcontainer/`: `devcontainer.json` (the image, pinned by
+  digest), `README.md`, `setup.sh`, `install-packages.sh`, `requirements.txt` and
+  `constraints.txt`.
+- Leave the image recipe (`.devcontainer/image/`) and `.github/workflows/build-image.yml` in
+  HDSx-workspace, so only one repo builds the image.
 - Rename the "SPPH 381H" strings.
 
-Open questions for Daniel:
-
-- The Codespace starts from `ghcr.io/chendaniely/hdsx-workspace`, which has Python built in.
-  Removing Python needs a new image built by this repo's own workflow. Reusing the old image
-  only hides Python.
-- Is the R package list the same as SPPH 381H's?
+Open question for Daniel: is the R package list the same as SPPH 381H's?
 
 ## 2. README: how to use the Codespace
 
