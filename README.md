@@ -87,6 +87,37 @@ The tidy data chapter of *Data Science: A First Introduction* covers the same id
 <https://datasciencebook.ca/wrangling.html#tidy-data>. So does the tidy data chapter of
 *R for Data Science*: see [`readings/r4ds-tidy-data.md`](readings/r4ds-tidy-data.md).
 
+*R for Data Science* is free to read online, under the CC BY-NC-ND 3.0 licence. The readings
+link the first edition's chapter and mention the second's. Cite the edition you read:
+
+> Wickham, H., & Grolemund, G. (2017). *R for Data Science: Import, Tidy, Transform,
+> Visualize, and Model Data*. O'Reilly Media. <https://r4ds.had.co.nz/>
+>
+> Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science: Import,
+> Tidy, Transform, Visualize, and Model Data* (2nd ed.). O'Reilly Media.
+> <https://r4ds.hadley.nz/>
+
+```bibtex
+@book{wickham2017r4ds,
+  title     = {R for Data Science: Import, Tidy, Transform, Visualize, and Model Data},
+  author    = {Wickham, Hadley and Grolemund, Garrett},
+  publisher = {O'Reilly Media},
+  year      = {2017},
+  isbn      = {978-1-4919-1039-9},
+  url       = {https://r4ds.had.co.nz/}
+}
+
+@book{wickham2023r4ds,
+  title     = {R for Data Science: Import, Tidy, Transform, Visualize, and Model Data},
+  author    = {Wickham, Hadley and Çetinkaya-Rundel, Mine and Grolemund, Garrett},
+  publisher = {O'Reilly Media},
+  year      = {2023},
+  edition   = {2},
+  isbn      = {978-1-4920-9740-2},
+  url       = {https://r4ds.hadley.nz/}
+}
+```
+
 ## Credits
 
 The setup pages in `docs/` and their screenshots in `img/` are adapted from the
