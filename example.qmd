@@ -1,0 +1,54 @@
+---
+title: "My First Report"
+author: "Your Name"
+format:
+  html:
+    embed-resources: true
+---
+
+## Welcome to your practice report
+
+This is a **Quarto** document. It mixes ordinary writing with live code, so your
+report and your analysis always stay in sync. When you render it, Quarto runs
+the code below and builds a finished HTML page.
+
+Try it now: change `author: "Your Name"` in the header above to your own name,
+then render this file.
+
+## A first look at the data
+
+The code chunk below reads a small practice dataset, `patients.csv`, which sits
+next to this file, and shows the first few rows.
+
+```{r}
+patients <- read.csv("patients.csv")
+head(patients)
+```
+
+## A first chart
+
+```{r}
+hist(patients$age,
+     main = "Age distribution of practice patients",
+     xlab = "Age (years)",
+     col  = "steelblue")
+```
+
+## A chart with ggplot2
+
+This chart uses the ggplot2 package, so it also checks that the course packages
+are installed.
+
+```{r}
+library(ggplot2)
+
+ggplot(patients, aes(x = age, y = systolic_bp, colour = diabetes)) +
+  geom_point(size = 3) +
+  labs(x = "Age (years)", y = "Systolic blood pressure (mm Hg)",
+       colour = "Diabetes")
+```
+
+## Your turn
+
+- Add a sentence here describing what you notice in the charts.
+- Render again and check that both your sentence and the charts appear.

@@ -1,0 +1,13 @@
+id,age,sex,region,systolic_bp,diabetes
+1,54,F,North,128,no
+2,61,M,North,141,yes
+3,47,F,South,119,no
+4,72,M,East,150,yes
+5,38,F,West,112,no
+6,59,M,South,134,no
+7,65,F,East,145,yes
+8,43,M,West,123,no
+9,50,F,North,130,no
+10,68,M,East,148,yes
+11,35,F,South,108,no
+12,57,M,West,138,no
