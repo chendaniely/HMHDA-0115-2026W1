@@ -1,167 +1,201 @@
-# Tidy Data in R: Pivoting, Separating and Summarising Messy Datasets
+# Tidy Data in R: Reshaping Messy Tables with `pivot_longer()`, `separate()` and `pivot_wider()`
 
 Instructor: Daniel Chen
 
 ## Summary
 
-This office-hours session was the first in a series that moves the course from point-and-click tools to working code-first. The instructor introduced a new course repository on GitHub. It holds the datasets, readings, and from now on the recordings, transcripts and summaries of these sessions. He showed how to open it in a GitHub Codespace, which is a full R coding environment that runs in the browser, so nothing needs to be installed on your own computer. The Codespace also includes GitHub Copilot, an AI coding agent that can read your code and data and edit your files for you. He followed up briefly on last week's question about servers: in practice, a dataset you receive from a hospital system almost certainly comes from the analytics server, not the transactional one.
+This office-hour session started the move from point-and-click tools to code. Daniel introduced a public GitHub repository that holds the course datasets (CSV and TSV files), the readings (including the Tidy Data paper in the `readings` folder), and, from now on, the office-hour recordings, transcripts and summaries. From that repository you can launch a **GitHub Codespace**: a ready-made R coding environment that runs in the browser, so nothing has to be installed on your own computer. The Codespace also includes **GitHub Copilot**, an AI coding assistant that can read and edit your code. This was the first time the setup was used in this course, so Daniel asked students to try it during the week and report any problems.
 
-The main topic was Hadley Wickham's 2014 paper *Tidy Data*, found in the repository's readings folder. The paper defines a "clean" or tidy dataset with three rules: each variable is a column, each observation is a row, and each cell holds one piece of information. It then names the common ways real data breaks those rules. The instructor worked through each problem in R using the `tidyverse`:
+The main topic was Hadley Wickham's 2014 paper *Tidy Data*. It gives a formal definition of a "clean" dataset, which is the shape analysis software expects: each variable is a column, each observation is a row, and each cell holds one value. Data is usually collected in whatever layout makes collection easy, which is why transactional systems and analytics systems differ. Daniel walked through the common ways data gets messy and the function that fixes each one:
 
-- **Column headers that are really values**: Pew religion-by-income survey and Billboard chart data. Fixed with `pivot_longer()`.
-- **One column that packs two variables together**: Ebola case and death counts by country. Fixed with `separate()`.
-- **One column that mixes different measurements**: Ebola cases and deaths in one `count` column. Fixed with `pivot_wider()`.
+- Column headers that are really values (fixed with `pivot_longer()`).
+- One column that holds more than one variable (fixed with `separate()`).
+- Variables stored in both rows and columns (fixed with `pivot_wider()`).
 
-Once the data was tidy, he showed how `group_by()` plus `summarize()` produces the roll-ups and drill-downs discussed last week.
+He demonstrated each fix in R with the `pew.csv`, `billboard.csv` and `ebola.csv` datasets.
 
-The practical takeaway has three parts. First, tidy data is often *less* pleasant for a human to read than a report-style table, but it is the shape that plotting, modelling and aggregation software expects. You can always pivot it back into a report layout later. Second, the main skill is diagnosis: spot a pattern in the column names, a cell that holds two facts, or a column whose average would be meaningless. Third, knowing words like "tidy", "pivot longer/wider", "separate" and "group by / summarize" makes you much better at prompting an AI agent. The live demo showed Copilot getting a grouping wrong, and the instructor had to correct it.
+The session also linked back to the previous week's ideas about roll-ups and drill-downs. Once data is tidy, `group_by()` plus `summarize()` produces grouped summaries, the coded version of a data cube or an Excel pivot table. Daniel used Copilot live to write a summary and a line plot. In one case it got the request wrong and he had to correct it, which showed both how useful these assistants are and why you must check what they produce. He also argued that knowing the vocabulary ("tidy", "pivot longer", "separate", "group by") helps you write better prompts for an AI assistant. Next week will use the same Codespace to cover visualization with `ggplot2`.
 
 ## Knowledge Points
 
-### 1. Getting into the coding environment (GitHub Codespaces)
+### 1. The course repository and GitHub Codespaces
 
-- **GitHub**: a website for sharing code. The course repository is fully public. You can read everything in it, including on your phone, **without** an account. You **do** need a free GitHub account to run code in it.
-- **Starting a Codespace**:
-  1. Open the course repository (the link will be posted on Canvas).
-  2. Click the green **Code** button.
-  3. Select the **Codespaces** tab at the top.
-  4. Click **Create Codespace**, or the **+** button if you already have one.
-  5. The first launch takes about five minutes.
-- **Starting R**: when the environment is ready, type a capital `R` in the terminal panel and press Enter. You can then:
-  - copy and paste code into the console, or
-  - select code in a file and press Ctrl+Enter (Cmd+Enter on a Mac) to send it to R. The instructor said "I believe" about this shortcut, so check it yourself.
-- **Stopping a Codespace**: when you are done, click the three-dots menu and choose **Stop Codespace**. Stopping (rather than deleting) means the next start-up is much faster. Deleting it means another five-or-so-minute build next time.
-- ⚠️ **Your work is not saved if the Codespace is deleted.** Deleting the container wipes any code you wrote. A fresh Codespace resets to the original course files. Treat it as a playground, and copy anything you want to keep into your own notes. The instructor's code from class will be added to the repository, so a fresh Codespace (or simply browsing the repo) will include it.
-- **File naming**: the instructor names class files with a leading number ("one dash tidy") so they sort to the top of the file list.
-- **Repository contents**:
-  - CSV and TSV datasets sit at the top level, so they can be read without a folder path.
-  - The *Tidy Data* PDF is in the `readings` folder.
-  - Navigation instructions, with screenshots still being added, are in the repository's front page.
+- **The course repository**: a public GitHub repository with all the datasets at the top level, the readings in a `readings` folder, and, going forward, the office-hour recordings, transcripts and AI-generated summaries. Daniel will link it on Canvas.
+  - **No account is needed to read it.** You can browse the files and summaries on any device, including a phone.
+  - **A GitHub.com account is needed to run code.** GitHub is a site for sharing code.
+- **Launching a Codespace**:
+  1. On the repository page, click the green **Code** button.
+  2. Choose the **Codespaces** tab.
+  3. Click **Create Codespace**, or click **+** if you already have one.
+  4. Wait for it to start. The first start takes roughly five minutes.
+- **Starting R in the Codespace**: when the terminal panel is ready, type a capital `R` and press Enter. You can then copy and paste code into it from the top of a script down.
+  - Alternatively, select code in the editor and press **Ctrl+Enter** (Daniel believed it is **Cmd+Enter** on a Mac) to send the selection to the R console.
+- **Stopping versus deleting**: when you are finished, open the **⋯** menu and choose **Stop Codespace**.
+  - Stopping lets it restart much faster next time.
+  - Deleting means the next start takes another five or so minutes.
+- ⚠️ **Deleting a Codespace erases everything you wrote in it.** Treat the Codespace as a playground. If you want to keep code you wrote, copy it somewhere else, for example into your own notes. A fresh Codespace resets to the repository's original contents. Daniel will save the code from this session into the repository so it is there on a fresh start, and you can read it on GitHub without launching a Codespace at all.
+- **Numbering files**: Daniel names in-class code files with a leading number so they sort to the top of the file list.
 
-### 2. GitHub Copilot as a coding agent
+### 2. GitHub Copilot, the coding agent
 
-- **What it is**: an AI chat panel on the right-hand side of the Codespace, which loaded one of the OpenAI models in class. GitHub gives a free monthly allowance. The instructor believed the free tier is about 1,500 requests per month, which is plenty for course work. Students with a university affiliation can apply for the GitHub Student Developer Pack for more credits.
-- **How it differs from web ChatGPT**: it is *agentic*. It reads your code and potentially your data, proposes edits, and asks permission to change your files ("keep this change?"). That is what "agentic coding" means.
-- ⚠️ **Privacy warning**: because the agent can read your data, be careful with any data about people that could identify individuals. The course repository is public. **Never put real patient data into the repository or a Codespace.**
-- **Work in small steps**: ask one question at a time, for example "average rank per week", then "plot that as a line". You get code one piece at a time and can check each step.
-- **Check its work**: in class Copilot grouped the Ebola data by the wrong variables and kept acting after the instructor wanted it to stop. You still need to understand the code well enough to catch mistakes.
-- **Vocabulary is leverage**: knowing the terms "tidy", "pivot longer", "pivot wider", "separate" and "group by / summarize" lets you tell the agent exactly what you want.
+- **What it is**: an AI chat panel on the right-hand side of the Codespace, running an OpenAI model.
+  - GitHub gives monthly free credits. Daniel believed the free tier is about 1,500 requests a month, which is plenty for course work.
+  - Students or people with a university affiliation may get more credits through the GitHub Student Developer Pack.
+- **How it differs from web ChatGPT**: it is an *agentic* coding tool.
+  - It reads your code, and potentially your data.
+  - It edits your files directly, asking permission ("can I make this change?") and then asking whether to keep the change.
+- **Work in small steps**: ask one question at a time, such as "average rank per week" and then "plot that as a line". It is easier to check each piece that way.
+- **Always check what it wrote.** In class it grouped by the wrong variables, and Daniel had to correct the code by hand (see *What went wrong live*).
+- ⚠️ **Privacy warning**: because the agent reads your code and data, be careful with any data about people that could identify individuals. The course repository is public. **Real patient data never goes into it, or into a Codespace launched from it.**
+- **Vocabulary helps prompting**: words like *tidy*, *pivot longer*, *pivot wider*, *separate*, and *group by / summarize* let you tell the AI precisely what you want.
 
-### 3. Follow-up: analytics vs transactional servers
+### 3. Recap from last week: transactional versus analytics servers
 
-- **Transactional server**: optimised for *collecting* data, the way data is entered day to day.
-- **Analytics server**: where data goes so you can *do things* with it.
-- **In practice**: if you are given a dataset or database connection from a hospital system, it is almost certainly on the analytics server. You will not notice a difference.
-- Data is usually stored in whatever shape made collection easy. Getting it into a shape that suits analysis is the subject of this session.
+- **Transactional server**: optimized for *collecting* data.
+- **Analytics server**: where data goes so it can be *analyzed*. In practice, if a hospital system gives you a dataset or a database connection, it is most likely on the analytics server, and you won't notice the difference.
+- **Roll-ups and drill-downs**: these are grouping operations. In code they are `group_by()` followed by `summarize()`, which is very similar to what you may already do in Excel.
 
-### 4. What tidy (clean) data means
+### 4. What "tidy data" means
 
-- **Source**: Hadley Wickham, *Tidy Data* (2014). Wickham is a founding creator of the `tidyverse` tools in R.
-- **Why "row" and "column" need defining**: the paper's Tables 1 and 2 show the same treatment results (people × treatment A/B), one the transpose of the other. Rows running horizontally doesn't tell you what a row *should* be.
-- **The three rules of a tidy dataset**:
-  - **Each variable forms a column.** "Treatment A" and "treatment B" are two values of one variable, `treatment`, so they belong in one column.
-  - **Each observation forms a row.** One unit of measurement per row. The original paper also says each type of observational unit forms a table, which leads into databases and joins. The modern framing keeps the focus on a single dataset.
-  - **Each cell contains one piece of information.**
-- **Tidy is not "nicer to read"**: Table 3 (`name`, `treatment`, `result`) is longer and less space-efficient. Comparisons by eye can be harder. But it is the shape that plotting and model-fitting software needs. From tidy data you can always pivot into any reporting layout.
-- **Colour in Excel breaks the one-fact-per-cell rule**: highlighting a value green or red adds a second piece of information to the cell. That is fine for scanning a spreadsheet, and the instructor does it himself. But colour does not exist once the data is loaded into analysis software. Record it as a separate column instead, such as a good/bad flag.
-- **Messy data can break the rules in several ways at once**: a dataset may have one problem or a combination. Fix them one at a time, easiest first.
+- **Source**: Hadley Wickham, *Tidy Data* (2014). The PDF is in the repository's `readings` folder. Wickham is a founder of the R `tidyverse` tools for cleaning data.
+- **Why rows and columns need a definition**: the paper's first two tables show the same treatment results (people × treatment A/B) laid out one way and then transposed.
+  - Both are "rows and columns", so "a row runs horizontally" is not enough of a definition.
+  - The tidy version (table 3) has columns `name`, `treatment` and `result`.
+- **The rules of a tidy dataset**:
+  1. **Each variable forms a column.** Treatment A and treatment B are values of one variable, `treatment`, not two variables.
+  2. **Each observation forms a row.** An observation is one unit of what you are measuring.
+  3. **Each cell holds one value.** This is the more modern rule Daniel emphasized. The paper's original third rule (also in the class script's comments) is *each type of observational unit forms a table*, which leads into databases, splitting tables, and joins.
+- **Colour is information hiding in a cell.** Shading a cell red or green to mean "bad" or "good" puts two things in one cell. That is fine for eyeballing a spreadsheet, and Excel quickly turns into a dashboard that way. But colour does not exist once the data is loaded into software. Put the flag in its own column, for example `good`/`bad`.
+- **Tidy is often less readable and less space-efficient**, and that is acceptable.
+  - Wide tables are better for humans and for reports.
+  - Tidy tables are what plotting and model-fitting need.
+  - You can always pivot a tidy dataset back into a report layout, so keep a tidy version as your analysis-ready copy.
+- **The common problems**: the paper lists five ways data gets messy. Daniel focused on the three he said cover almost every problem you will meet. The remaining two concern splitting and joining tables. A messy dataset may have one of these problems or several. Fix them one at a time, easiest first.
 
-### 5. The common messy-data problems and their fixes
+| Problem | How to spot it | Fix |
+|---|---|---|
+| Column headers are values, not variable names | Many column names follow a pattern (income brackets, `wk1`…`wk76`, dates) | `pivot_longer()` |
+| Multiple variables stored in one column | One value encodes two things (`m014` = male + age 0–14; `Cases_Guinea` = count type + country) | `separate()` |
+| Variables stored in both rows and columns | A summary of the value column is nonsense because it mixes different measures (min and max temperature, cases and deaths) | `pivot_wider()` |
 
-The paper lists five problems. The first three cover almost everything you will meet. The last two concern splitting and joining tables.
+### 5. Problem 1: Column headers are values → `pivot_longer()`
 
-- **Problem 1 — Column headers are values, not variable names**
-  - *How to spot it*: a large chunk of the column names follows a pattern. Examples: income ranges `<$10k`, `$10-20k`; weeks `wk1`, `wk2`; dates.
-  - *Fix*: `pivot_longer()`. The patterned columns are stacked into rows: one new column holds the old header names, and another holds the cell values.
-    - It is called "longer" because you end up with more rows.
-    - The 2014 paper calls this *melting*.
-  - *Examples*: Pew religion × income, and Billboard weekly rankings.
-- **Problem 2 — Multiple variables stored in one column**
-  - *How to spot it*: one value encodes two facts.
-    - In the paper's tuberculosis data, a header like `m014` means *male* and *age 0–14*.
-    - In the Ebola data, `Cases_Guinea` means *case count* and *Guinea*.
-  - *Why it matters*: you can't ask "how many males in total?" with a group-by, because there is no single variable to point to.
-  - *Fix*: first `pivot_longer()`, then `separate()` the combined column. Split it on a delimiter such as `_`, or take the first letter as sex and the rest as age group.
-- **Problem 3 — Variables stored in both rows and columns**
-  - *How to spot it*: ask "would a summary of this column make sense?"
-    - In the paper's weather data, one `value` column holds both maximum and minimum temperatures. The average of a mix of mins and maxes means nothing.
-    - Census tables sometimes mix counts and dollar amounts in one numeric column.
-    - Even when the unit is the same (two counts), if they measure different things, the column needs splitting.
-    - Another hint: if you have to keep pointing at different parts of the table to explain what each number means, it is probably not tidy.
-  - *Fix*: `pivot_wider()`. Each unique value of one column (for example `element` or `type`) becomes its own new column, filled from a value column. This is what an Excel pivot table does.
+- **Pew example**: a Pew Research Center survey of religion by household income. Each row is a religion, and the columns are income brackets (`<$10k`, `$10-20k`, …, `Don't know/refused`) containing counts.
+  - This is a typical frequency table and is fine for manual entry from a report.
+  - The bracket columns follow a pattern. They are values of a variable that should be called *income*.
+- **`pivot_longer()`** moves those columns down into rows: more rows, fewer columns, hence "longer".
+  - The paper calls this *melting*.
+  - The result for Pew has columns `religion`, `income` and `frequency`. It goes from 18 rows × 11 columns to 180 rows × 3 columns.
+- **Its arguments**:
+  - `cols`: which columns to pivot. `-religion` means "everything except `religion`". You could also list the columns, or use a helper such as `starts_with("wk")`.
+  - `names_to`: the name of the new column that holds the old column headers.
+  - `values_to`: the name of the new column that holds the cell values.
+  - `names_prefix`: text to strip from the old headers, for example remove `wk` and keep the number.
+  - `names_transform`: convert the new names column to another type, for example `as.integer`.
+  - `values_drop_na = TRUE`: drop rows whose value is missing.
+  - If you omit `names_to`, the new column is called `name` by default (this is what happened in the Ebola example).
+- **Billboard example**: Billboard Hot 100 songs from the year 2000. Each row is a song (`artist`, `track`, `time`, `date.entered`), and weekly ranks sit in `wk1` to `wk76`.
+  - After pivoting, there is one row per song per week it was on the chart. Weeks with no ranking are dropped.
+- **Why this matters in practice (Daniel's NHS COVID story)**: as Daniel described it, a daily-updated COVID spreadsheet added a new *column* each day until Excel ran out of columns. The modelling silently broke until someone noticed.
+  - Rows are easy to add; columns run out.
+  - People tend to build datasets by adding columns, because that is easier to look at when curating by hand. Store new observations as rows.
+- **`NA`**: R's placeholder for a missing value, shown in red uppercase in the console.
+  - It is deliberately different from `0`, which is a real value.
+  - It is also clearer than a blank cell, where you cannot tell what the blank means.
 
-### 6. Reading R / tidyverse code from scratch
+### 6. Grouped summaries: `group_by()` + `summarize()`
 
-- **`library(tidyverse)`**: loads the tidyverse packages, including `readr`, `dplyr`, `tidyr` and `ggplot2`. You run it once per session before using their functions.
-- **`read_csv("pew.csv")`**: reads a CSV file into a table, called a *tibble*. It reports how many rows and columns it found and what type it guessed for each column:
-  - `chr`: text
-  - `dbl`: number
-  - `lgl`: TRUE/FALSE
-  - `date`, `time`: dates and times
-- **`<-` (assignment)**: saves the result under a name. `pew <- read_csv("pew.csv")` means "store this table as `pew`". You then refer to it by that name.
-- **`|>` (the pipe)**: read it as "and then". It passes the table on the left into the function on the right.
-- **Choosing columns**:
-  - `-religion` means "every column *except* `religion`".
-  - `-c(Date, Day)` means "everything except `Date` and `Day`".
-  - `starts_with("wk")` means "every column whose name begins with `wk`".
-  - There are other ways to select columns; the instructor suggested exploring them with Copilot.
-- **Why the instructor prefers R for this**: tidyverse code reads close to English. For example, "separate the `name` column into `type` and `country` on the underscore" is almost word for word what the code says.
+- **Summary function**: a calculation that takes many numbers and returns one, such as `sum()`, `mean()` (the average), or `max()`.
+- **The pattern**: "for each X, give me a summary of Y."
+  - "For each X" means `group_by(X)`.
+  - "Give me a summary of Y" means `summarize(new_name = summary_function(Y))`.
+  - You can compute several summaries at once.
+- **Pew example**: "How many people were asked for each religion?"
+  - In the wide table, you would have to add up each row.
+  - In the tidy table, it is `group_by(religion)` then `summarize(count = sum(frequency))`.
+- **Link to last week**: grouping by several variables builds the data cube used for drill-downs. This is only possible because the data is tidy.
+- **Billboard example (written by Copilot)**: average rank per week across all songs, then plotted as a line.
+  - The pattern changes after about 20 weeks. Daniel suggested this may be missing data, or simply that people stop listening to the same song.
+  - `ggplot2` is next week's topic.
 
-### 7. Summary functions and group-by aggregation
+### 7. Problem 2: Multiple variables in one column → `separate()`
 
-- **Summary function**: takes many numbers in and returns one number out. Examples include `sum()`, `mean()` (average) and `max()`.
-- **`group_by()` + `summarize()`**: the tidyverse way to build a table of summaries.
-  - `group_by()` says "for each…".
-  - `summarize()` computes one or more summary values per group. You name each new column, as in `count = sum(frequency)`.
-- **Link to last week's data cube**: grouping by one variable gives a two-dimensional table. Grouping by several variables gives the roll-ups and drill-downs of the data cube. This is the same idea as grouping in Excel.
-- **Why tidy first**: on the original Pew table, "people per religion" needs a row-sum across columns. That works only because of this particular layout. On tidy data it is simply group by `religion`, sum `frequency`.
+- **Tuberculosis example (from the paper)**: rows are country and year, and columns like `m014` mean *male, age 0–14*, through to female 65+ and female unknown.
+  - The cell value 52 carries two facts: sex and age group.
+  - You cannot `group_by()` sex, because sex is not a variable of its own.
+  - **Fix order**: first `pivot_longer()`, then split the combined column. Here the split is by position: the first letter is sex, the rest is the age group.
+- **Ebola example (used in code instead of TB)**: daily cumulative counts from the 2014 Ebola epidemic in West Africa, up to day 289 in this dataset.
+  - Columns are `Date`, `Day`, and then `Cases_Guinea`, `Cases_Liberia`, `Cases_SierraLeone`, …, `Deaths_Mali`.
+  - Each count therefore encodes *type* (cases or deaths) and *country*.
+- **`separate()`** splits one column into several. Its arguments:
+  - `col`: the column to split.
+  - `into`: the names of the new columns.
+  - `sep`: the separator to split on.
+  - Here `name` is split on `"_"` into `type` and `country`.
+- **Leave yourself breadcrumbs**: if you hand-curate data, use a deliberate separator such as an underscore, a dash, or a one-letter prefix between parts of a code. Even if you can't process it yet, you or someone else will be grateful later.
+- **Why Daniel prefers R and the tidyverse**: the code reads like the English description of the problem. "Separate this column into type and country on the underscore."
+- **Cumulative counts**: the ministries of health reported running totals. So the maximum count per country and type is the total.
 
-### 8. Missing values
+### 8. Problem 3: Variables in rows and columns → `pivot_wider()`
 
-- **`NA`** ("not available") is R's placeholder for a missing value. It prints in a different colour and in capitals, so it stands out.
-- A missing value is **not** zero. Zero means something, and a blank cell is ambiguous. `NA` makes "missing" explicit.
-- `values_drop_na = TRUE` in `pivot_longer()` drops rows where the value is missing. In the Billboard data, these are the weeks a song was no longer on the chart.
+- **Weather example (from the paper)**: rows are a station, year and month, with day columns `d1`…`d31`, plus an `element` column saying whether a row is `tmax` or `tmin`.
+  - After pivoting the days longer, the table looks tidy, but the `value` column mixes minimum and maximum temperatures.
+- **How to spot it**: ask whether a summary of the column makes sense.
+  - The average of a mix of minimum and maximum temperatures is meaningless, even though the unit is the same (°C).
+  - In census data the mixed values can even have different units (a count next to a dollar amount).
+  - Another hint: you have to point all over the table just to explain what one number means.
+- **Ebola again**: after `separate()`, `count` holds both cases and deaths. "Maximum count" across both is not something you would report. You want the maximum cases and the maximum deaths separately.
+- **`pivot_wider()`** is the reverse of `pivot_longer()`. In Excel terms it is essentially a pivot table. Its arguments:
+  - `names_from`: the column whose unique values become new column names (`type` → `Cases`, `Deaths`).
+  - `values_from`: the column that fills those new columns (`count`).
+- The resulting tidy Ebola table has one row per date and country, with `Cases` and `Deaths` columns. The original Ebola data had all three problems.
 
-### 9. Why this matters in practice
+### 9. Problem 4 (in the class script): Multiple observational units in one table
 
-- **Rows scale; columns run out**: the instructor described a COVID-era case from the UK's NHS. A spreadsheet that added a new column for each day hit Excel's column limit. New data silently stopped updating and modelling was broken for a long time before anyone noticed. You can almost always add rows; columns eventually run out.
-- **Leave breadcrumbs when you hand-curate data**: if you enter data in a wide, report-friendly layout, build in strategic delimiters (underscores or dashes) or fixed one-letter codes, as in `Cases_Guinea` or `m014`. Then you, or whoever cleans it later, can split the parts apart easily.
-- **Diagnosing a difficult dataset**: work through the three common problems in turn, and you should end up with something tidy.
+- In tidy Billboard data, song facts (`year`, `artist`, `track`, `time`) repeat on every weekly-rank row.
+- The script splits this into a `song` table with an `id` key and a `rank` table that refers back to it by `id`.
+- This connects to the paper's "one observational unit per table" rule and to database joins. It was in the script but not run in class.
 
 ## Code from class
 
-All code was run in the course Codespace. The datasets are at the top of the repository, so no folder path is needed.
+Everything below runs in R in the Codespace. The datasets sit at the top of the repository, so you can read them by filename alone.
 
-### Loading the tidyverse and reading the Pew survey data
+### Loading the tidyverse and reading the Pew data
 
 ```r
-library(tidyverse)            # load readr, dplyr, tidyr, ggplot2, ...
+library(tidyverse)          # loads dplyr, tidyr, readr, ggplot2, etc.
 
-pew <- read_csv("pew.csv")    # read the CSV and save it as `pew`
-pew                           # print it to look at it
+pew <- read_csv("pew.csv")  # save the dataset into a variable called pew
+pew                         # print it to look at it
 ```
 
-`read_csv()` reports the shape and column types. One text column (`religion`) is followed by ten numeric columns whose *names* are income ranges. That is Problem 1.
+`read_csv()` reports how it read each column. This is worth reading every time:
 
 ```
 Rows: 18 Columns: 11
+── Column specification ──────────────────────
+Delimiter: ","
 chr  (1): religion
 dbl (10): <$10k, $10-20k, $20-30k, $30-40k, $40-50k, $50-75k, $75-100k, $100...
 ```
 
-### Tidying Pew with `pivot_longer()`
+### Tidying Pew with `pivot_longer()` and summarizing it
 
 ```r
-pew_tidy <- pew |>
+pew_tidy <- pew |>            # |> is the pipe: "take this, then..."
   pivot_longer(
-    cols = -religion,           # pivot every column except religion
-    names_to = "income",        # old column headers go into a column called income
-    values_to = "frequency"     # old cell values go into a column called frequency
+    cols = -religion,         # pivot every column except religion
+    names_to = "income",      # old column headers go into "income"
+    values_to = "frequency"   # old cell values go into "frequency"
   )
 pew_tidy
+
+pew_tidy |>
+  group_by(religion) |>                 # for each religion...
+  summarize(count = sum(frequency))     # ...add up the frequencies
 ```
 
-The result goes from 18 rows × 11 columns to 180 rows × 3 columns:
+The shape changes from 18 rows × 11 columns to:
 
 ```
 # A tibble: 180 × 3
@@ -172,17 +206,9 @@ The result goes from 18 rows × 11 columns to 180 rows × 3 columns:
  3 Agnostic $20-30k                   60
 ```
 
-### Aggregating the tidy Pew data
+The summary has one row per religion. For example, `Agnostic` totals 826 and `Catholic` totals 8054.
 
-```r
-pew_tidy |>
-  group_by(religion) |>                 # for each religion...
-  summarize(count = sum(frequency))     # ...add up the frequencies into a column named count
-```
-
-This answers "how many people were asked in each religion?" It returns one row per religion, for example `Agnostic 826` and `Catholic 8054`.
-
-### Tidying the Billboard chart data
+### Tidying Billboard and plotting average rank (Copilot-assisted)
 
 ```r
 billboard <- read_csv("billboard.csv")
@@ -190,17 +216,25 @@ billboard
 
 billboard_tidy <- billboard |>
   pivot_longer(
-    cols = starts_with("wk"),                    # every column whose name starts with "wk"
+    cols = starts_with("wk"),                  # every column starting with "wk"
     names_to = "week",
-    names_prefix = "wk",                         # strip the "wk" so only the number is left
-    names_transform = list(week = as.integer),   # store week as a whole number, not text
+    names_prefix = "wk",                       # strip "wk", keep the number
+    names_transform = list(week = as.integer), # make week a whole number
     values_to = "rank",
-    values_drop_na = TRUE          # drop weeks the song was not on the chart
+    values_drop_na = TRUE                      # drop weeks the song was not on the chart
   )
 billboard_tidy
+
+# written by Copilot from the prompts "average ranking over each week
+# across all the songs" and then "plot that result as a line"
+billboard_tidy |>
+  group_by(week) |>
+  summarize(average_rank = mean(rank)) |>
+  ggplot(aes(x = week, y = average_rank)) +
+  geom_line()
 ```
 
-The column report shows the weekly columns run from `wk1` to `wk76`. The last ones (`wk66`–`wk76`) were read as `lgl` because they are entirely empty: no song stayed on the chart that long.
+`read_csv()` showed something worth noticing. The last weekly columns are all empty, so R guessed they were logical (`lgl`, true/false) rather than numbers:
 
 ```
 Rows: 317 Columns: 81
@@ -211,31 +245,9 @@ date  (1): date.entered
 time  (1): time
 ```
 
-After pivoting and dropping missing weeks, the data has 5,307 rows, with `week` stored as an integer:
+After pivoting, the table is 5,307 rows × 7 columns, with integer `week` and `rank` columns.
 
-```
-# A tibble: 5,307 × 7
-    year artist  track                   time   date.entered  week  rank
-   <dbl> <chr>   <chr>                   <time> <date>       <int> <dbl>
- 1  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       1    87
- 2  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       2    82
-```
-
-### Average rank per week, and a line plot (written with Copilot)
-
-The instructor asked Copilot to "look at the average ranking over each week across all the songs". It proposed the `group_by()` / `summarize()` step. He then asked it to "plot that result as a line".
-
-```r
-billboard_tidy |>
-  group_by(week) |>
-  summarize(average_rank = mean(rank)) |>         # mean() is a summary function
-  ggplot(aes(x = week, y = average_rank)) +       # week on the x-axis, average rank on the y-axis
-  geom_line()                                     # draw it as a line
-```
-
-`ggplot2` will be covered properly next week. The plot showed songs fading over time as they stop being new. After around 20 weeks there was a change in pattern. The instructor suggested this might be missing data or simply listeners tiring of a song.
-
-### Tidying the Ebola data: `pivot_longer()`, then `separate()`
+### Tidying Ebola: `pivot_longer()`, then `separate()`
 
 ```r
 ebola <- read_csv("ebola.csv")
@@ -243,45 +255,37 @@ ebola
 
 ebola_long <- ebola |>
   pivot_longer(
-    cols = -c(Date, Day),        # pivot everything except Date and Day
-    values_to = "count",
+    cols = -c(Date, Day),     # pivot everything except Date and Day
+    values_to = "count",      # no names_to, so headers land in a column called "name"
     values_drop_na = TRUE
   )
 ebola_long
-```
 
-The original has 122 rows × 18 columns, with headers such as `Cases_Guinea` and `Deaths_SierraLeone`. Each header encodes *what* is counted and *which country*. No `names_to` was given, so the old headers land in a default column called `name`:
-
-```
-# A tibble: 738 × 4
-   Date       Day name               count
-   <chr>    <dbl> <chr>              <dbl>
- 1 1/5/2015   289 Cases_Guinea        2776
- 2 1/5/2015   289 Cases_SierraLeone  10030
- 3 1/5/2015   289 Deaths_Guinea       1786
-```
-
-```r
 ebola_long <- ebola_long |>
   separate(col = 'name',
     into = c("type", "country"),  # split the header into two variables
-    sep = "_"                     # split on the underscore
+    sep = "_"                     # on the underscore
   )
 ebola_long
 ```
 
+Before and after `separate()`:
+
 ```
-# A tibble: 738 × 5
+   Date       Day name               count
+ 1 1/5/2015   289 Cases_Guinea        2776
+ 2 1/5/2015   289 Cases_SierraLeone  10030
+```
+
+```
    Date       Day type   country     count
-   <chr>    <dbl> <chr>  <chr>       <dbl>
  1 1/5/2015   289 Cases  Guinea       2776
  2 1/5/2015   289 Cases  SierraLeone 10030
- 3 1/5/2015   289 Deaths Guinea       1786
 ```
 
-### Maximum count per country and type
+### Total cases and deaths per country
 
-The counts were reported cumulatively each day, so the maximum is the total.
+The counts are cumulative, so the maximum is the total:
 
 ```r
 ebola_long |>
@@ -289,60 +293,113 @@ ebola_long |>
   summarize(max_count = max(count))
 ```
 
-This gives 16 rows, for example `Guinea Cases 2776`, `Liberia Deaths 3496` and `SierraLeone Cases 10030`. Grouping by two variables makes R print this message. It is information, not an error:
-
 ```
 `summarise()` has regrouped the output.
 ℹ Summaries were computed grouped by country and type.
 ℹ Output is grouped by country.
-ℹ Use `summarise(.groups = "drop_last")` to silence this message.
 ```
 
-### Final tidy form with `pivot_wider()`
+This message is information, not an error. After grouping by two variables, the result stays grouped by the first one (`country`).
+
+### Spreading cases and deaths into their own columns with `pivot_wider()`
 
 ```r
 ebola_tidy <- ebola_long |>
-    pivot_wider(
-        names_from = type,     # each unique value of type (Cases, Deaths) becomes a column
-        values_from = count    # fill those columns from count
-)
-
+  pivot_wider(
+    names_from = type,     # "Cases" and "Deaths" become column names
+    values_from = count    # filled from the count column
+  )
 ebola_tidy
 ```
-
-Cases and deaths are now separate columns, one row per date per country (375 rows). This is the tidy form of the Ebola dataset:
 
 ```
 # A tibble: 375 × 5
    Date         Day country     Cases Deaths
-   <chr>      <dbl> <chr>       <dbl>  <dbl>
  1 1/5/2015     289 Guinea       2776   1786
  2 1/5/2015     289 SierraLeone 10030   2977
- 3 1/4/2015     288 Guinea       2775   1781
+```
+
+### Further steps in the saved script (not run in class)
+
+The class script takes the examples further. Note that `Date` was read as text (`chr`, for example `"1/5/2015"`), and the script converts it into a real date with `mdy()` (month-day-year).
+
+```r
+# Billboard: add the calendar date for each week's rank
+billboard_tidy <- billboard |>
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    names_transform = list(week = as.integer),
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) |>
+  mutate(date = date.entered + (week - 1) * 7) |>  # date entered + (week - 1) weeks
+  arrange(artist, track, week) |>
+  select(year, artist, track, time, week, rank, date)
+
+# Ebola: tidy names and real dates
+ebola_tidy <- ebola_long |>
+  pivot_wider(
+    names_from = type,
+    values_from = count
+  ) |>
+  rename(date = Date, day = Day, cases = Cases, deaths = Deaths) |>
+  mutate(date = mdy(date)) |>
+  arrange(country, date)
+
+# Weather: gather days into rows, then spread tmax/tmin into columns
+weather <- read_csv("weather.csv")
+
+weather_tidy <- weather |>
+  pivot_longer(
+    cols = starts_with("d"),
+    names_to = "day",
+    names_prefix = "d",
+    names_transform = list(day = as.integer),
+    values_to = "temp",
+    values_drop_na = TRUE
+  ) |>
+  mutate(date = make_date(year, month, day)) |>
+  pivot_wider(
+    names_from = element,      # tmax / tmin become their own columns
+    values_from = temp
+  ) |>
+  select(id, date, tmax, tmin) |>
+  arrange(id, date)
+
+# Billboard: split song facts and weekly ranks into two tables sharing an id key
+song <- billboard_tidy |>
+  distinct(artist, track, year, time) |>
+  mutate(id = row_number(), .before = 1)
+
+rank <- billboard_tidy |>
+  left_join(song, by = c("artist", "track", "year", "time")) |>
+  select(id, week, date, rank)
 ```
 
 ### What went wrong live
 
-- **Copilot grouped by the wrong variables**: asked for the maximum value for each type for each country, Copilot grouped by day and country, and put the code in the wrong place. The instructor rewrote it as `group_by(country, type) |> summarize(max_count = max(count))`. Copilot then carried on making changes he hadn't asked for, and he had to tell it to stop and skip. Always read what the agent proposes before accepting it.
-- **Unsure of the `pivot_wider()` argument name**: the instructor briefly second-guessed whether the argument was `names_from`. It is. The working call is `pivot_wider(names_from = type, values_from = count)`.
-- **Typo loading packages**: the first attempt to type `library()` was mistyped and corrected before running `library(tidyverse)`.
-- **Pasting a large chunk into the terminal**: when the whole script was pasted into the R console at once, the echoed code appeared jumbled, with stray markers and overlapping lines. All the code still ran and every result printed correctly. The echo is cosmetic; check the output, not the echo.
+- **Copilot grouped by the wrong variables**: asked for the maximum value for each type and country, Copilot grouped by day and country, and put the code in the wrong place. Daniel rewrote it by hand as `group_by(country, type) |> summarize(max_count = max(count))`, which is what the console shows running. Copilot also kept making changes after that, and he had to tell it to stop and skip. The lesson: read and check what the agent writes before accepting it.
+- **Misremembered argument name**: when writing `pivot_wider()`, Daniel briefly doubted the argument name before settling on `names_from = type`. The arguments are `names_from` and `values_from`, mirroring `names_to` and `values_to` in `pivot_longer()`.
+- **Mistyped `library`**: the first line was mistyped and corrected to `library(tidyverse)`. If R says it cannot find a function, check your spelling first.
+- **Garbled echo when pasting a large block**: pasting the whole script into the R console at once made the console's echo of the code look scrambled. The code still ran, and every result printed normally afterwards. Running a selection from the editor with Ctrl+Enter / Cmd+Enter avoids this.
 
 ## Questions
 
-- **Q:** A student asked whether the data provided for the Module 1 assignment is essentially already a tidy dataset.
-  **A:** Yes. It has already been cleaned for you. Today's material is for students who want to bring their own dataset and need to get it into that analysis-ready form.
+- **Q:** Is the initial data provided for the Module 1 assignment essentially already a tidy dataset?
+  **A:** Yes. It has already been cleaned for you. Today's material is for people who want to bring their own dataset and need to get it into that analysis-ready form.
 
 ## Assignments
 
-- [ ] Before next week's office hours: create a GitHub account if you don't have one, open the course repository in a Codespace, and work through this session's code using the recording. Report any problems with the Codespace. The first ~15 minutes of the recording walk through setup.
-- [ ] Remember to **Stop** (not delete) your Codespace when you finish, and copy any code you want to keep.
+- [ ] Before next week's office hour: create a GitHub.com account if you don't have one, launch a Codespace from the course repository, and work through this session's code while rewatching the recording. The first 15 minutes cover the setup.
+- [ ] Report any problems with the Codespace or Copilot at next week's office hour.
 
 ---
 
-- prompt: prompt-notes.md @ c7623cc
+- prompt: prompt-notes.md @ 9540d32
 - prompt-hash: c082a6eab694
 - model: claude-opus-5-5 (requested: opus)
 - backend: claude
 - inputs: transcript-plaud.md, history.R, R-console.txt
-- generated: 2026-10-23
+- generated: 2026-10-30
