@@ -17,4 +17,7 @@ Thumbs.db
 .env
 .env.*
 
+# Daniel's local decisions and next steps: never committed
+TODO.md
+
 # Required HTML/PDF submissions are intentionally not ignored.

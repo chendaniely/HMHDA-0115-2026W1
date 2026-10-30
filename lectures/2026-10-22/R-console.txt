@@ -1,0 +1,335 @@
+R version 4.6.1 (2026-06-24) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[sess] Connected to VS Code
+
+^[[200~library(tidyverse)
+
+pew <- read_csv("pew.csv")
+pew
+
+pew_tidy <- pew |>
+  pivot_longer(
+    cols = -religion,
+    names_to = "income",
+    values_to = "frequency"
+  )
+pew_tidy
+
+pew_tidy |>
+  group_by(religion) |>
+  summarize(count = sum(frequency))
+
+
+
+billboard <- read_csv("billboard.csv")
+billboard
+
+billboard_tidy <- billboard |>
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    names_prefix = "wk",
+    names_transform = list(week = as.integer),
+    values_to = "rank",
+    values_drop_na = TRUE          # drop weeks the song was not on the chart
+  )
+billboard_tidy
+
+billboard_tidy |>
+  group_by(week) |>
+  summarize(average_rank = mean(rank)) |>
+  ggplot(aes(x = week, y = average_rank)) +
+  geom_line()
+
+
+
+ebola <- read_csv("ebola.csv")
+ebola
+
+ebola_long <- ebola |>
+  pivot_longer(
+    cols = -c(Date, Day),
+    values_to = "count",
+    values_drop_na = TRUE
+  )
+ebola_long
+
+ebola_long <- ebola_long |>
+  separate(col = 'name',
+    into = c("type", "country"),  # split the header into two variables
+    sep = "_"
+  )
+ebola_long
+
+ebola_long |>
+  group_by(country, type) |>
+  summarize(max_count = max(count))
+
+ebola_tidy <- ebola_long |>
+    pivot_wider(
+        names_from = type,
+        values_from = count
+) 
+
+ebola_tidy^[[201~
+> library(tidyverse)
+
+pew <- read_csv("pew.csv")
+pew
+
+pew_tidy <- pew |>
+  pivot_longer(
+    cols = -religion,
+    names_to = "income",
+    values_to = "frequency"
+  )
+pew_tidy
+
+pew_tidy |>
+  group_by(religion) |>
+  summarize(count = sum(frequency))
+
+
+
+billboard <- read_csv("billboard.csv")
+billboard
+
+ebola_tidylues_from = count(count)) split the header into two variables chart
+── Attaching core tidyverse packages ───────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+Rows: 18 Columns: 11                                                                                               
+── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): religion
+dbl (10): <$10k, $10-20k, $20-30k, $30-40k, $40-50k, $50-75k, $75-100k, $100...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# A tibble: 18 × 11
+   religion `<$10k` `$10-20k` `$20-30k` `$30-40k` `$40-50k` `$50-75k` `$75-100k`
+   <chr>      <dbl>     <dbl>     <dbl>     <dbl>     <dbl>     <dbl>      <dbl>
+ 1 Agnostic      27        34        60        81        76       137        122
+ 2 Atheist       12        27        37        52        35        70         73
+ 3 Buddhist      27        21        30        34        33        58         62
+ 4 Catholic     418       617       732       670       638      1116        949
+ 5 Don’t k…      15        14        15        11        10        35         21
+ 6 Evangel…     575       869      1064       982       881      1486        949
+ 7 Hindu          1         9         7         9        11        34         47
+ 8 Histori…     228       244       236       238       197       223        131
+ 9 Jehovah…      20        27        24        24        21        30         15
+10 Jewish        19        19        25        25        30        95         69
+11 Mainlin…     289       495       619       655       651      1107        939
+12 Mormon        29        40        48        51        56       112         85
+13 Muslim         6         7         9        10         9        23         16
+14 Orthodox      13        17        23        32        32        47         38
+15 Other C…       9         7        11        13        13        14         18
+16 Other F…      20        33        40        46        49        63         46
+17 Other W…       5         2         3         4         2         7          3
+18 Unaffil…     217       299       374       365       341       528        407
+# ℹ 3 more variables: `$100-150k` <dbl>, `>150k` <dbl>,
+#   `Don't know/refused` <dbl>
+# A tibble: 180 × 3
+   religion income             frequency
+   <chr>    <chr>                  <dbl>
+ 1 Agnostic <$10k                     27
+ 2 Agnostic $10-20k                   34
+ 3 Agnostic $20-30k                   60
+ 4 Agnostic $30-40k                   81
+ 5 Agnostic $40-50k                   76
+ 6 Agnostic $50-75k                  137
+ 7 Agnostic $75-100k                 122
+ 8 Agnostic $100-150k                109
+ 9 Agnostic >150k                     84
+10 Agnostic Don't know/refused        96
+# ℹ 170 more rows
+# ℹ Use `print(n = ...)` to see more rows
+# A tibble: 18 × 2
+   religion                count
+   <chr>                   <dbl>
+ 1 Agnostic                  826
+ 2 Atheist                   515
+ 3 Buddhist                  411
+ 4 Catholic                 8054
+ 5 Don’t know/refused        272
+ 6 Evangelical Prot         9472
+ 7 Hindu                     257
+ 8 Historically Black Prot  1995
+ 9 Jehovah's Witness         215
+10 Jewish                    682
+11 Mainline Prot            7470
+12 Mormon                    581
+13 Muslim                    116
+14 Orthodox                  363
+15 Other Christian           129
+16 Other Faiths              449
+17 Other World Religions      42
+18 Unaffiliated             3707
+Rows: 317 Columns: 81                                                                                              
+── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr   (2): artist, track
+dbl  (66): year, wk1, wk2, wk3, wk4, wk5, wk6, wk7, wk8, wk9, wk10, wk11, wk...
+lgl  (11): wk66, wk67, wk68, wk69, wk70, wk71, wk72, wk73, wk74, wk75, wk76
+date  (1): date.entered
+time  (1): time
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# A tibble: 317 × 81
+    year artist     track time  date.entered   wk1   wk2   wk3   wk4   wk5   wk6
+   <dbl> <chr>      <chr> <tim> <date>       <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+ 1  2000 2 Pac      Baby… 04:22 2000-02-26      87    82    72    77    87    94
+ 2  2000 2Ge+her    The … 03:15 2000-09-02      91    87    92    NA    NA    NA
+ 3  2000 3 Doors D… Kryp… 03:53 2000-04-08      81    70    68    67    66    57
+ 4  2000 3 Doors D… Loser 04:24 2000-10-21      76    76    72    69    67    65
+ 5  2000 504 Boyz   Wobb… 03:35 2000-04-15      57    34    25    17    17    31
+ 6  2000 98^0       Give… 03:24 2000-08-19      51    39    34    26    26    19
+ 7  2000 A*Teens    Danc… 03:44 2000-07-08      97    97    96    95   100    NA
+ 8  2000 Aaliyah    I Do… 04:15 2000-01-29      84    62    51    41    38    35
+ 9  2000 Aaliyah    Try … 04:03 2000-03-18      59    53    38    28    21    18
+10  2000 Adams, Yo… Open… 05:30 2000-08-26      76    76    74    69    68    67
+# ℹ 307 more rows
+# ℹ 70 more variables: wk7 <dbl>, wk8 <dbl>, wk9 <dbl>, wk10 <dbl>, wk11 <dbl>,
+#   wk12 <dbl>, wk13 <dbl>, wk14 <dbl>, wk15 <dbl>, wk16 <dbl>, wk17 <dbl>,
+#   wk18 <dbl>, wk19 <dbl>, wk20 <dbl>, wk21 <dbl>, wk22 <dbl>, wk23 <dbl>,
+#   wk24 <dbl>, wk25 <dbl>, wk26 <dbl>, wk27 <dbl>, wk28 <dbl>, wk29 <dbl>,
+#   wk30 <dbl>, wk31 <dbl>, wk32 <dbl>, wk33 <dbl>, wk34 <dbl>, wk35 <dbl>,
+#   wk36 <dbl>, wk37 <dbl>, wk38 <dbl>, wk39 <dbl>, wk40 <dbl>, wk41 <dbl>, …
+# ℹ Use `print(n = ...)` to see more rows
+# A tibble: 5,307 × 7
+    year artist  track                   time   date.entered  week  rank
+   <dbl> <chr>   <chr>                   <time> <date>       <int> <dbl>
+ 1  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       1    87
+ 2  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       2    82
+ 3  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       3    72
+ 4  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       4    77
+ 5  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       5    87
+ 6  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       6    94
+ 7  2000 2 Pac   Baby Don't Cry (Keep... 04:22  2000-02-26       7    99
+ 8  2000 2Ge+her The Hardest Part Of ... 03:15  2000-09-02       1    91
+ 9  2000 2Ge+her The Hardest Part Of ... 03:15  2000-09-02       2    87
+10  2000 2Ge+her The Hardest Part Of ... 03:15  2000-09-02       3    92
+# ℹ 5,297 more rows
+# ℹ Use `print(n = ...)` to see more rows
+Rows: 122 Columns: 18                                                         
+── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): Date
+dbl (17): Day, Cases_Guinea, Cases_Liberia, Cases_SierraLeone, Cases_Nigeria...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# A tibble: 122 × 18
+   Date         Day Cases_Guinea Cases_Liberia Cases_SierraLeone Cases_Nigeria
+   <chr>      <dbl>        <dbl>         <dbl>             <dbl>         <dbl>
+ 1 1/5/2015     289         2776            NA             10030            NA
+ 2 1/4/2015     288         2775            NA              9780            NA
+ 3 1/3/2015     287         2769          8166              9722            NA
+ 4 1/2/2015     286           NA          8157                NA            NA
+ 5 12/31/2014   284         2730          8115              9633            NA
+ 6 12/28/2014   281         2706          8018              9446            NA
+ 7 12/27/2014   280         2695            NA              9409            NA
+ 8 12/24/2014   277         2630          7977              9203            NA
+ 9 12/21/2014   273         2597            NA              9004            NA
+10 12/20/2014   272         2571          7862              8939            NA
+# ℹ 112 more rows
+# ℹ 12 more variables: Cases_Senegal <dbl>, Cases_UnitedStates <dbl>,
+#   Cases_Spain <dbl>, Cases_Mali <dbl>, Deaths_Guinea <dbl>,
+#   Deaths_Liberia <dbl>, Deaths_SierraLeone <dbl>, Deaths_Nigeria <dbl>,
+#   Deaths_Senegal <dbl>, Deaths_UnitedStates <dbl>, Deaths_Spain <dbl>,
+#   Deaths_Mali <dbl>
+# ℹ Use `print(n = ...)` to see more rows
+# A tibble: 738 × 4
+   Date       Day name               count
+   <chr>    <dbl> <chr>              <dbl>
+ 1 1/5/2015   289 Cases_Guinea        2776
+ 2 1/5/2015   289 Cases_SierraLeone  10030
+ 3 1/5/2015   289 Deaths_Guinea       1786
+ 4 1/5/2015   289 Deaths_SierraLeone  2977
+ 5 1/4/2015   288 Cases_Guinea        2775
+ 6 1/4/2015   288 Cases_SierraLeone   9780
+ 7 1/4/2015   288 Deaths_Guinea       1781
+ 8 1/4/2015   288 Deaths_SierraLeone  2943
+ 9 1/3/2015   287 Cases_Guinea        2769
+10 1/3/2015   287 Cases_Liberia       8166
+# ℹ 728 more rows
+# ℹ Use `print(n = ...)` to see more rows
+# A tibble: 738 × 5
+   Date       Day type   country     count
+   <chr>    <dbl> <chr>  <chr>       <dbl>
+ 1 1/5/2015   289 Cases  Guinea       2776
+ 2 1/5/2015   289 Cases  SierraLeone 10030
+ 3 1/5/2015   289 Deaths Guinea       1786
+ 4 1/5/2015   289 Deaths SierraLeone  2977
+ 5 1/4/2015   288 Cases  Guinea       2775
+ 6 1/4/2015   288 Cases  SierraLeone  9780
+ 7 1/4/2015   288 Deaths Guinea       1781
+ 8 1/4/2015   288 Deaths SierraLeone  2943
+ 9 1/3/2015   287 Cases  Guinea       2769
+10 1/3/2015   287 Cases  Liberia      8166
+# ℹ 728 more rows
+# ℹ Use `print(n = ...)` to see more rows
+`summarise()` has regrouped the output.
+ℹ Summaries were computed grouped by country and type.
+ℹ Output is grouped by country.
+ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+ℹ Use `summarise(.by = c(country, type))` for per-operation grouping (`?dplyr::dplyr_by`) instead.
+# A tibble: 16 × 3
+# Groups:   country [8]
+   country      type   max_count
+   <chr>        <chr>      <dbl>
+ 1 Guinea       Cases       2776
+ 2 Guinea       Deaths      1786
+ 3 Liberia      Cases       8166
+ 4 Liberia      Deaths      3496
+ 5 Mali         Cases          7
+ 6 Mali         Deaths         6
+ 7 Nigeria      Cases         22
+ 8 Nigeria      Deaths         8
+ 9 Senegal      Cases          3
+10 Senegal      Deaths         0
+11 SierraLeone  Cases      10030
+12 SierraLeone  Deaths      2977
+13 Spain        Cases          1
+14 Spain        Deaths         1
+15 UnitedStates Cases          4
+16 UnitedStates Deaths         1
+# A tibble: 375 × 5
+   Date         Day country     Cases Deaths
+   <chr>      <dbl> <chr>       <dbl>  <dbl>
+ 1 1/5/2015     289 Guinea       2776   1786
+ 2 1/5/2015     289 SierraLeone 10030   2977
+ 3 1/4/2015     288 Guinea       2775   1781
+ 4 1/4/2015     288 SierraLeone  9780   2943
+ 5 1/3/2015     287 Guinea       2769   1767
+ 6 1/3/2015     287 Liberia      8166   3496
+ 7 1/3/2015     287 SierraLeone  9722   2915
+ 8 1/2/2015     286 Liberia      8157   3496
+ 9 12/31/2014   284 Guinea       2730   1739
+10 12/31/2014   284 Liberia      8115   3471
+# ℹ 365 more rows
+# ℹ Use `print(n = ...)` to see more rows
